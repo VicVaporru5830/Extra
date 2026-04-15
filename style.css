@@ -1,7 +1,7 @@
 body {
   font-family: Arial, sans-serif;
   background-image: url('pokehex.png');
-  background-size: contain;
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-color: #ffffff; /* color de fondo si sobra espacio */
