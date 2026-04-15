@@ -2,14 +2,13 @@ document.getElementById("btnClima").addEventListener("click", obtenerClima);
 
 async function obtenerClima() {
   navigator.geolocation.getCurrentPosition(async (pos) => {
-    const res = await fetch("http://localhost:3000/clima", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        lat: pos.coords.latitude,
-        lon: pos.coords.longitude
-      })
-    });
+    const res = await fetch("https://extra-0hhv.onrender.com/clima", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ lat, lon })
+});
 
     const data = await res.json();
 
