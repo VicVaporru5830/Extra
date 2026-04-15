@@ -1,0 +1,27 @@
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(#87ceeb, #ffffff);
+  text-align: center;
+}
+
+.poke-btn {
+  background-color: #ffcc00;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.poke-card {
+  margin: 20px auto;
+  padding: 20px;
+  width: 250px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.poke-card img {
+  width: 120px;
+}
