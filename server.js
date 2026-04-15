@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
 app.post("/clima", async (req, res) => {
   const { lat, lon } = req.body;
 
-  if (!lat || !lon) {
+  if (lat === undefined || lon === undefined) {
     return res.status(400).json({
       error: "Latitud y longitud requeridas"
     });
@@ -38,40 +38,42 @@ app.post("/clima", async (req, res) => {
           format: "json"
         },
         headers: {
-          "User-Agent": "extra-clima-app"
-        }
+          "User-Agent": "extra-geoclima-app"
+        },
+        timeout: 10000
       }
     );
 
     const ciudad =
-      geoResponse.data.address.city ||
-      geoResponse.data.address.town ||
-      geoResponse.data.address.village ||
-      "Desconocida";
+      geoResponse.data?.address?.city ||
+      geoResponse.data?.address?.town ||
+      geoResponse.data?.address?.village ||
+      "Ubicación desconocida";
 
-    // 2️⃣ Clima (OpenWeatherMap)
+    // 2️⃣ Clima (OpenWeatherMap) 👉 USANDO LAT/LON (ESTABLE)
     const weatherResponse = await axios.get(
       "https://api.openweathermap.org/data/2.5/weather",
       {
         params: {
-          q: ciudad,
+          lat,
+          lon,
           units: "metric",
           lang: "es",
           appid: process.env.API_KEY
-        }
+        },
+        timeout: 10000
       }
     );
 
-    const resultado = {
+    res.json({
       ciudad,
       temperatura: weatherResponse.data.main.temp,
       humedad: weatherResponse.data.main.humidity,
       condicion: weatherResponse.data.weather[0].description
-    };
+    });
 
-    res.json(resultado);
   } catch (error) {
-    console.error(error);
+    console.error("ERROR CLIMA:", error.message);
     res.status(500).json({
       error: "Error al obtener información del clima"
     });
@@ -102,16 +104,11 @@ app.post("/consultas", (req, res) => {
 
     data.push(nuevaConsulta);
 
-    fs.writeFileSync(
-      "consultas.json",
-      JSON.stringify(data, null, 2)
-    );
+    fs.writeFileSync("consultas.json", JSON.stringify(data, null, 2));
+    res.json({ mensaje: "Consulta guardada" });
 
-    res.json({
-      mensaje: "Consulta guardada",
-      id: nuevaConsulta.id
-    });
   } catch (error) {
+    console.error("ERROR CONSULTAS:", error.message);
     res.status(500).json({
       error: "Error al guardar la consulta"
     });
@@ -127,15 +124,15 @@ app.get("/consultas", (req, res) => {
 
     res.json(data);
   } catch (error) {
+    console.error("ERROR LISTAR CONSULTAS:", error.message);
     res.status(500).json({
       error: "Error al leer las consultas"
     });
   }
 });
 
-// ================== PUERTO (COMPATIBLE CON RENDER) ==================
+// ================== PUERTO (RENDER COMPATIBLE) ==================
 const PORT = process.env.PORT || 3000;
-
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
 });
