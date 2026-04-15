@@ -2,15 +2,28 @@ document.getElementById("btnClima").addEventListener("click", obtenerClima);
 
 async function obtenerClima() {
   navigator.geolocation.getCurrentPosition(async (pos) => {
+
+    // ✅ DEFINIR lat y lon
+    const lat = pos.coords.latitude;
+    const lon = pos.coords.longitude;
+
+    // ✅ LLAMAR SOLO A RENDER
     const res = await fetch("https://extra-0hhv.onrender.com/clima", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({ lat, lon })
-});
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ lat, lon })
+    });
 
     const data = await res.json();
+
+    // ✅ MANEJO DE ERROR
+    if (!data || !data.condicion) {
+      document.getElementById("resultado").innerHTML =
+        "<p>Error al obtener el clima</p>";
+      return;
+    }
 
     let imagen = "castform-normal.png";
 
