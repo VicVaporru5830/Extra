@@ -1,12 +1,11 @@
 body {
   font-family: Arial, sans-serif;
   background-image: url('pokehex.png');
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-color: #000; /* color de fondo si sobra espacio */
   min-height: 100vh;
-  text-align: center;
 }
 
 .poke-btn {
